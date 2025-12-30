@@ -200,12 +200,10 @@ final isAuthenticatedProvider = Provider<bool>((ref) => ref.watch(sessionProvide
 class LoginFormControllers {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final GlobalKey<FormState> formKey;
 
   LoginFormControllers()
       : emailController = TextEditingController(),
-        passwordController = TextEditingController(),
-        formKey = GlobalKey<FormState>();
+        passwordController = TextEditingController();
 
   void dispose() {
     emailController.dispose();
@@ -220,7 +218,7 @@ class LoginFormControllers {
   String get email => emailController.text.trim();
   String get password => passwordController.text;
 
-  bool validate() => formKey.currentState?.validate() ?? false;
+  bool validate(FormState? formState) => formState?.validate() ?? false;
 }
 
 /// Login form controllers provider (autodispose)

@@ -14,11 +14,18 @@ import '../providers/auth_providers.dart';
 import '../providers/signup_providers.dart';
 
 /// Signup screen - Pure Riverpod with ConsumerWidget using Controllers
-class SignupScreen extends ConsumerWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends ConsumerState<SignupScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
     final formControllers = ref.watch(signupFormControllersProvider);
     final agreedToTerms = ref.watch(signupTermsAgreedProvider);
     final signupState = ref.watch(signupProvider);
@@ -46,7 +53,7 @@ class SignupScreen extends ConsumerWidget {
     });
 
     void onSignup() {
-      if (formControllers.validate()) {
+      if (formControllers.validate(_formKey.currentState)) {
         if (!agreedToTerms) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -70,7 +77,7 @@ class SignupScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Form(
-            key: formControllers.formKey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

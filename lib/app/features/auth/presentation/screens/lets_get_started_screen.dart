@@ -10,25 +10,32 @@ import '../../../../shared/widgets/app_dropdown_field.dart';
 import '../../../../shared/widgets/app_text_fields.dart';
 import '../providers/signup_providers.dart';
 
-class LetsGetStartedScreen extends ConsumerWidget {
+class LetsGetStartedScreen extends ConsumerStatefulWidget {
   const LetsGetStartedScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controllers = ref.watch(letsGetStartedControllersProvider);
+  ConsumerState<LetsGetStartedScreen> createState() => _LetsGetStartedScreenState();
+}
 
-    Future<void> selectDate() async {
-      final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-      );
-      if (picked != null) {
-        // Format: YYYY-MM-DD
-        controllers.dobController.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-      }
+class _LetsGetStartedScreenState extends ConsumerState<LetsGetStartedScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  Future<void> selectDate(BuildContext context, TextEditingController dobController) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      // Format: YYYY-MM-DD
+      dobController.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final controllers = ref.watch(letsGetStartedControllersProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -44,7 +51,7 @@ class LetsGetStartedScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 24, right: 24, bottom: 40),
           child: Form(
-            key: controllers.formKey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -83,7 +90,7 @@ class LetsGetStartedScreen extends ConsumerWidget {
                   hintText: "Select Date of Birth",
                   controller: controllers.dobController,
                   readOnly: true,
-                  onTap: selectDate,
+                  onTap: () => selectDate(context, controllers.dobController),
                   suffixIcon: const Icon(Icons.calendar_today_outlined,
                       color: AppColors.textSecondary),
                 ),
@@ -120,7 +127,7 @@ class LetsGetStartedScreen extends ConsumerWidget {
                 AppPrimaryButton(
                   text: 'Create',
                   onPressed: () {
-                    if (controllers.validate()) {
+                    if (controllers.validate(_formKey.currentState)) {
                       // Perform Create Logic (e.g., update profile)
                       // For now, navigate to Home
                       AppRoutes.navigateAndClearStack(context, AppRoutes.home);

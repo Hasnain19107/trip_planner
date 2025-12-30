@@ -8,7 +8,7 @@ class AppImages {
 
   // Logo
   static const String logo = '$_basePath/logo.png';
-  static const String splashLogo = '$_basePath/splashlogo.png';
+  static const String splashScreen = '$_basePath/SplashScreen.png';
 
   // Placeholders
   static const String placeholder = '$_basePath/placeholder.png';

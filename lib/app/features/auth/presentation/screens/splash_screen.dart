@@ -20,75 +20,33 @@ class SplashScreen extends ConsumerWidget {
     });
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: AppColors.secondary,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // App Icon
-            TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: 1.0),
-              duration: const Duration(milliseconds: 800),
-              curve: Curves.easeOutBack,
-              builder: (context, value, child) {
-                return Transform.scale(
-                  scale: value,
-                  child: Opacity(opacity: value.clamp(0.0, 1.0), child: child),
-                );
-              },
-              child: Image.asset(AppImages.splashLogo, fit: BoxFit.contain),
-            ),
-            const SizedBox(height: 32),
-
-            // App Name with animation
-            TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: 1.0),
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.easeIn,
-              builder: (context, value, child) {
-                return Opacity(opacity: value, child: child);
-              },
-              child: Text(
-                AppStrings.appName,
-                style: AppTextStyles.h1.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.5,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Full screen splash image
+          Image.asset(
+            AppImages.splashScreen,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          // Loading indicator overlay
+          Positioned(
+            bottom: 100,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: const SizedBox(
+                width: 30,
+                height: 30,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  strokeWidth: 3,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
-
-            // Tagline
-            TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: 1.0),
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.easeIn,
-              builder: (context, value, child) {
-                return Opacity(opacity: value, child: child);
-              },
-              child: Text(
-                'Plan your perfect adventure',
-                style: AppTextStyles.bodyLarge.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
-                ),
-              ),
-            ),
-            const SizedBox(height: 80),
-
-            // Loading indicator
-            const SizedBox(
-              width: 30,
-              height: 30,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                strokeWidth: 3,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -107,7 +65,7 @@ class SplashScreen extends ConsumerWidget {
       if (sessionState.status == AuthStatus.authenticated) {
         AppRoutes.navigateAndClearStack(context, AppRoutes.home);
       } else {
-        AppRoutes.navigateAndClearStack(context, AppRoutes.login);
+       // AppRoutes.navigateAndClearStack(context, AppRoutes.login);
       }
     }
   }

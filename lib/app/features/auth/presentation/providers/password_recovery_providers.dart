@@ -7,11 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ForgotPasswordControllers {
   final TextEditingController emailController;
-  final GlobalKey<FormState> formKey;
 
   ForgotPasswordControllers()
-      : emailController = TextEditingController(),
-        formKey = GlobalKey<FormState>();
+      : emailController = TextEditingController();
 
   void dispose() {
     emailController.dispose();
@@ -20,6 +18,8 @@ class ForgotPasswordControllers {
   void clear() {
     emailController.clear();
   }
+
+  bool validate(FormState? formState) => formState?.validate() ?? false;
 }
 
 final forgotPasswordControllersProvider = Provider.autoDispose<ForgotPasswordControllers>((ref) {
@@ -140,12 +140,10 @@ final forgotOrpProvider = StateNotifierProvider<ForgotOrpNotifier, ForgotOrpStat
 class ResetPasswordControllers {
   final TextEditingController newPasswordController;
   final TextEditingController confirmPasswordController;
-  final GlobalKey<FormState> formKey;
 
   ResetPasswordControllers()
       : newPasswordController = TextEditingController(),
-        confirmPasswordController = TextEditingController(),
-        formKey = GlobalKey<FormState>();
+        confirmPasswordController = TextEditingController();
 
   void dispose() {
     newPasswordController.dispose();
@@ -160,7 +158,7 @@ class ResetPasswordControllers {
   String get newPassword => newPasswordController.text;
   String get confirmPassword => confirmPasswordController.text;
 
-  bool validate() => formKey.currentState?.validate() ?? false;
+  bool validate(FormState? formState) => formState?.validate() ?? false;
 }
 
 final resetPasswordControllersProvider = Provider.autoDispose<ResetPasswordControllers>((ref) {

@@ -9,11 +9,18 @@ import '../../../../shared/widgets/app_buttons.dart';
 import '../../../../shared/widgets/app_text_fields.dart';
 import '../providers/password_recovery_providers.dart';
 
-class ResetPasswordScreen extends ConsumerWidget {
+class ResetPasswordScreen extends ConsumerStatefulWidget {
   const ResetPasswordScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+}
+
+class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
     final controllers = ref.watch(resetPasswordControllersProvider);
     final state = ref.watch(resetPasswordProvider);
 
@@ -39,7 +46,7 @@ class ResetPasswordScreen extends ConsumerWidget {
     });
 
     void onResetPassword() {
-      if (!controllers.validate()) return;
+      if (!controllers.validate(_formKey.currentState)) return;
       if (controllers.newPassword != controllers.confirmPassword) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -66,7 +73,7 @@ class ResetPasswordScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Form(
-            key: controllers.formKey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

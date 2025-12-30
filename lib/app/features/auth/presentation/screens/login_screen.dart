@@ -13,11 +13,18 @@ import '../../../../shared/widgets/app_text_fields.dart';
 import '../providers/auth_providers.dart';
 
 /// Login screen - Pure Riverpod with ConsumerWidget using Controllers
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
     final formControllers = ref.watch(loginFormControllersProvider);
     final loginState = ref.watch(loginProvider);
     final isLoading = loginState.isLoading;
@@ -43,7 +50,7 @@ class LoginScreen extends ConsumerWidget {
     });
 
     void onLogin() {
-      if (formControllers.validate()) {
+      if (formControllers.validate(_formKey.currentState)) {
         ref
             .read(loginProvider.notifier)
             .login(
@@ -59,7 +66,7 @@ class LoginScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Form(
-            key: formControllers.formKey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

@@ -97,14 +97,12 @@ class SignupFormControllers {
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
-  final GlobalKey<FormState> formKey;
   bool agreedToTerms = false;
 
   SignupFormControllers()
       : emailController = TextEditingController(),
         passwordController = TextEditingController(),
-        confirmPasswordController = TextEditingController(),
-        formKey = GlobalKey<FormState>();
+        confirmPasswordController = TextEditingController();
 
   void dispose() {
     emailController.dispose();
@@ -123,7 +121,7 @@ class SignupFormControllers {
   String get password => passwordController.text;
   String get confirmPassword => confirmPasswordController.text;
 
-  bool validate() => formKey.currentState?.validate() ?? false;
+  bool validate(FormState? formState) => formState?.validate() ?? false;
 }
 
 /// Signup form controllers provider (autodispose)
@@ -187,15 +185,13 @@ class LetsGetStartedControllers {
   final TextEditingController countryController;
   final TextEditingController genderController;
   final TextEditingController languageController;
-  final GlobalKey<FormState> formKey;
 
   LetsGetStartedControllers()
       : nameController = TextEditingController(),
         dobController = TextEditingController(),
         countryController = TextEditingController(),
         genderController = TextEditingController(),
-        languageController = TextEditingController(),
-        formKey = GlobalKey<FormState>();
+        languageController = TextEditingController();
 
   void dispose() {
     nameController.dispose();
@@ -213,7 +209,7 @@ class LetsGetStartedControllers {
     languageController.clear();
   }
   
-  bool validate() => formKey.currentState?.validate() ?? false;
+  bool validate(FormState? formState) => formState?.validate() ?? false;
 }
 
 /// Lets Get Started form controllers provider (autodispose)

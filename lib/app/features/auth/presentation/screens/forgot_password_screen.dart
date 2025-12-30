@@ -9,11 +9,18 @@ import '../../../../shared/widgets/app_buttons.dart';
 import '../../../../shared/widgets/app_text_fields.dart';
 import '../providers/password_recovery_providers.dart';
 
-class ForgotPasswordScreen extends ConsumerWidget {
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
     final controllers = ref.watch(forgotPasswordControllersProvider);
     final state = ref.watch(forgotPasswordProvider);
 
@@ -31,7 +38,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
     });
 
     void onSendCode() {
-      if (!controllers.formKey.currentState!.validate()) return;
+      if (!controllers.validate(_formKey.currentState)) return;
       ref.read(forgotPasswordProvider.notifier).sendCode(controllers.emailController.text.trim());
     }
 
@@ -49,7 +56,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Form(
-            key: controllers.formKey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
